@@ -4,61 +4,60 @@
     </head>
       <body>
         <script>
-	    function sendForm() {
-	          var myNode = document.getElementById("results");
-		        while (myNode.firstChild) {
-			        myNode.removeChild(myNode.firstChild);
-				      }
-				            var info = google.script.run.withSuccessHandler(onSuccess).callNLP();
-					          
-						        function onSuccess(data) {
-							        for (j = 0; j < data.length; j++) {
-								          // Create html tags
-									            var link = document.createElement("a");
-										              var header = document.createElement("h5");
-											                var para = document.createElement("p");
-													          var lineBreak = document.createElement("hr");
-														            
-															              // Insert text into tags and strip html tags
-																                var hnode = document.createTextNode(strip(data[j]["title"]));
-																		          
-																			            // Trim the description to 140 characters and cut at last whole word
-																				              var trimmedString = data[j]["description"].substring(0, 140);
-																					                trimmedString = trimmedString.substring(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
-																							          
-																								            // Before adding text strip any html tags in description
-																									              var pnode = document.createTextNode(strip(trimmedString) + "...");
-																										                
-																												          // Create link for the related article that will open in new tab
-																													            link.setAttribute('href', data[j]["url"]);
-																														              link.setAttribute('target', '_blank');
-																															                
-																																	          // Add children to parents
-																																		            header.appendChild(hnode);
-																																			              link.appendChild(header);
-																																				                para.appendChild(pnode);
-																																						          
-																																							            // Append all html tags results div
-																																								              element = document.getElementById('results');
-																																									                element.appendChild(link);
-																																											          element.appendChild(para);
-																																												            element.appendChild(lineBreak);
-																																													            }
-																																														          }
-																																															        
-																																																      // Strip away any html tags present in a string
-																																																            function strip(html) {
-																																																	            var tmp = document.createElement("DIV");
-																																																		            tmp.innerHTML = html;
-																																																			            return tmp.textContent || tmp.innerText || "";
-																																																				          }
-																																																					      }
-																																																					          
-																																																						    </script>
-																																																						      <div id="all">
-																																																						        <button onclick="sendForm();">Refresh</button>
-																																																							  </div>
-																																																							    <div id="results">
-																																																							      </div>
-																																																							        </body>
-																																																								</html>
+			function sendForm() {
+				var myNode = document.getElementById("results");
+				while (myNode.firstChild) {
+					myNode.removeChild(myNode.firstChild);
+				}
+				var info = google.script.run.withSuccessHandler(onSuccess).callNLP();
+
+				function onSuccess(data) {
+					for (j = 0; j < data.length; j++) {
+						// Create html tags
+						var link = document.createElement("a");
+						var header = document.createElement("h5");
+						var para = document.createElement("p");
+						var lineBreak = document.createElement("hr");
+
+						// Insert text into tags and strip html tags
+						var hnode = document.createTextNode(strip(data[j]["title"]));
+
+						// Trim the description to 140 characters and cut at last whole word
+						var trimmedString = data[j]["description"].substring(0, 140);
+						trimmedString = trimmedString.substring(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
+
+						// Before adding text strip any html tags in description
+						var pnode = document.createTextNode(strip(trimmedString) + "...");
+
+						// Create link for the related article that will open in new tab
+						link.setAttribute('href', data[j]["url"]);
+						link.setAttribute('target', '_blank');
+
+						// Add children to parents
+						header.appendChild(hnode);
+						link.appendChild(header);
+						para.appendChild(pnode);
+
+						// Append all html tags results div
+						element = document.getElementById('results');
+						element.appendChild(link);
+						element.appendChild(para);
+						element.appendChild(lineBreak);
+					}
+				}
+
+				// Strip away any html tags present in a string
+				function strip(html) {
+					var tmp = document.createElement("DIV");
+					tmp.innerHTML = html;
+					return tmp.textContent || tmp.innerText || "";
+				}
+			}
+		</script>
+		<div id="all">
+		    <button onclick="sendForm();">Refresh</button>
+  	    </div>
+		<div id="results">
+		</div>
+	</body>
+</html>
